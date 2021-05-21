@@ -1,0 +1,31 @@
+# Project: Sal's Shipping
+weight = 41.5
+ground_flat = 20
+premium_flat = 125
+print("Your package weight is: ", weight, "lb")
+print("_________________________________")
+# Ground Shipping
+if weight <= 2:
+  cost = 1.5 * weight + ground_flat
+elif weight > 2 and weight <= 6:
+  cost = 3.0 * weight + ground_flat
+elif weight > 6 and weight <= 10:
+  cost = 4.0 * weight + ground_flat
+else:
+  cost = 4.75 * weight + ground_flat
+print("- Ground Shipping cost: $", cost)
+
+# Ground Shipping Premium
+premium_cost = premium_flat
+print("- Premium Ground Shipping cost: $", premium_cost)
+
+# Drone Shipping
+if weight <= 2:
+  cost = 4.5 * weight
+elif weight > 2 and weight <= 6:
+  cost = 9.0 * weight
+elif weight > 6 and weight <= 10:
+  cost = 12.0 * weight
+else:
+  cost = 14.25 * weight
+print("- Drone Shipping cost: $", cost)
