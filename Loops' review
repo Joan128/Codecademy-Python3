@@ -1,4 +1,3 @@
-# Your code below: loops' review
 single_digits = range(10)
 
 squares = []
