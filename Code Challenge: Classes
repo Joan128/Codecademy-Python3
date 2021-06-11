@@ -1,0 +1,392 @@
+# CLASSES
+
+## 1. setting up our robot
+
+class DriveBot:
+  def __init__(self, motor_speed=0, sensor_range=0, direction=0):
+    self.motor_speed = motor_speed
+    self.sensor_range = sensor_range
+    self.direction = direction
+
+robot_1 = DriveBot(5, 10, 90)
+
+print(robot_1.motor_speed)
+print(robot_1.direction)
+print(robot_1.sensor_range)
+
+# or
+class DriveBot:
+    def __init__(self):
+        self.motor_speed = 0
+        self.direction = 0
+        self.sensor_range = 0
+
+test_bot = DriveBot()
+test_bot.motor_speed = 30
+test_bot.direction = 90
+test_bot.sensor_range = 25
+
+## 2. adding robot logic
+
+class DriveBot:
+    def __init__(self):
+        self.motor_speed = 0
+        self.direction = 0
+        self.sensor_range = 0
+    
+    def control_bot(self, new_speed, new_direction):
+      self.motor_speed = new_speed
+      self.direction = new_direction
+
+    def adjust_sensor(self, new_sensor_range):
+      self.sensor_range = new_sensor_range
+
+robot_1 = DriveBot()
+robot_1.control_bot(10, 180)
+robot_1.adjust_sensor(20)
+
+print(robot_1.motor_speed)
+print(robot_1.direction)
+print(robot_1.sensor_range)
+
+## 3. enhanced constructor
+
+def __init__(self, motor_speed = 0, direction = 180, sensor_range = 10):
+      self.motor_speed = motor_speed
+      self.sensor_range = sensor_range
+      self.direction = direction
+      
+robot_2 = DriveBot(35, 75, 25)
+
+print(robot_2.motor_speed)
+print(robot_2.direction)
+print(robot_2.sensor_range)
+
+## 4. controlling them all
+
+class DriveBot:
+  all_disabled = False
+    latitude = -999999
+    longitude = -999999
+  
+robot_3 = DriveBot(20, 60, 10)
+
+DriveBot.latitude = -50.0
+DriveBot.longitude = 50.0
+DriveBot.all_disabled = True
+
+print(robot_1.latitude)
+print(robot_2.longitude)
+print(robot_3.all_disabled)
+
+## 5. identifying robots
+
+class DriveBot:
+  robot_count = 0
+  def __init__(self, motor_speed = 0, direction = 180, sensor_range = 10):
+    self.motor_speed = motor_speed
+    self.direction = direction
+    self.sensor_range = sensor_range
+    DriveBot.robot_count += 1
+    self.id = DriveBot.robot_count
+   
+print(robot_1.id) #1
+print(robot_2.id) #2
+print(robot_3.id) #3
+
+# CLASSES advanced
+
+## 1. robot inheritance
+
+class Robot:
+    all_disabled = False
+    latitude = -999999
+    longitude = -999999
+    robot_count = 0
+
+    def __init__(self, speed = 0, direction = 180, sensor_range = 10):
+        self.speed = speed
+        self.direction = direction
+        self.sensor_range = sensor_range
+        self.obstacle_found = False
+        Robot.robot_count += 1
+        self.id = Robot.robot_count
+
+    def control_bot(self, new_speed, new_direction):
+        self.speed = new_speed
+        self.direction = new_direction
+
+    def adjust_sensor(self, new_sensor_range):
+        self.sensor_range = new_sensor_range
+
+    def avoid_obstacles(self):
+        if self.obstacle_found:
+            self.direction = (self.direction + 180) % 360
+            self.obstacle_found = False
+
+class DriveBot(Robot):
+
+  def __init__(self, motor_speed = 0, direction = 180, sensor_range = 10):
+    super().__init__(motor_speed, direction, sensor_range)
+
+class WalkBot(Robot):
+  def __init__(self, steps_per_minute = 0, direction = 180, sensor_range = 10, step_length = 5):
+    super().__init__(steps_per_minute, direction, sensor_range)
+    self.step_length = step_length
+
+
+robot_1 = DriveBot()
+robot_2 = WalkBot()
+robot_3 = WalkBot(20, 90, 15, 10)
+
+# Use these print statements to test your code!
+
+print(robot_2.id) # 2
+print(robot_3.step_length) # 10
+print(robot_1.speed) # 0
+
+## 2. using the superclass
+
+class Robot:
+    all_disabled = False
+    latitude = -999999
+    longitude = -999999
+    robot_count = 0
+
+    def __init__(self, speed = 0, direction = 180, sensor_range = 10):
+        self.speed = speed
+        self.direction = direction
+        self.sensor_range = sensor_range
+        self.obstacle_found = False
+        Robot.robot_count += 1
+        self.id = Robot.robot_count
+
+    def control_bot(self, new_speed, new_direction):
+        self.speed = new_speed
+        self.direction = new_direction
+
+    def adjust_sensor(self, new_sensor_range):
+        self.sensor_range = new_sensor_range
+
+    def avoid_obstacles(self):
+        if self.obstacle_found:
+            self.direction = (self.direction + 180) % 360
+            self.obstacle_found = False
+
+
+class DriveBot(Robot):
+
+    def __init__(self, motor_speed = 0, direction = 180, sensor_range = 10):
+        super().__init__(motor_speed, direction, sensor_range)
+
+
+class WalkBot(Robot):
+
+    def __init__(self, steps_per_minute = 0, direction = 180, sensor_range = 10, step_length = 5):
+        super().__init__(steps_per_minute, direction, sensor_range)
+        self.step_length = step_length
+
+    # Override the adjust_sensor method here!
+    def adjust_sensor(self, new_sensor_range):
+       super().adjust_sensor(new_sensor_range)
+       self.obstacle_found = False
+       self.step_length = 5
+
+robot_walk = WalkBot(60, 90, 10, 15)
+robot_walk.obstacle_found = True
+print(robot_walk.sensor_range) # 10
+print(robot_walk.obstacle_found) # True
+print(robot_walk.step_length) # 15
+
+# Call the overridden adjust_sensor method here!
+robot_walk.adjust_sensor(25)
+
+print(robot_walk.sensor_range) # 25
+print(robot_walk.obstacle_found) # False
+print(robot_walk.step_length) # 5
+
+## 3. conditional superclass logic
+
+class Robot:
+    all_disabled = False
+    latitude = -999999
+    longitude = -999999
+    robot_count = 0
+
+    def __init__(self, speed = 0, direction = 180, sensor_range = 10):
+        self.speed = speed
+        self.direction = direction
+        self.sensor_range = sensor_range
+        self.obstacle_found = False
+        Robot.robot_count += 1
+        self.id = Robot.robot_count
+
+    def control_bot(self, new_speed, new_direction):
+        self.speed = new_speed
+        self.direction = new_direction
+
+    def adjust_sensor(self, new_sensor_range):
+        self.sensor_range = new_sensor_range
+
+    def avoid_obstacles(self):
+        if self.obstacle_found:
+            self.direction = (self.direction + 180) % 360
+            self.obstacle_found = False
+
+
+class DriveBot(Robot):
+
+    def __init__(self, motor_speed = 0, direction = 180, sensor_range = 10):
+        super().__init__(motor_speed, direction, sensor_range)
+
+
+class WalkBot(Robot):
+
+    def __init__(self, steps_per_minute = 0, direction = 180, sensor_range = 10, step_length = 5):
+        super().__init__(steps_per_minute, direction, sensor_range)
+        self.step_length = step_length
+
+    def adjust_sensor(self, new_sensor_range):
+       super().adjust_sensor(new_sensor_range)
+       self.obstacle_found = False
+       self.step_length = 5
+
+   # Override the avoid_obstacles method here!
+    def avoid_obstacles(self):
+       if(self.obstacle_found):
+           if(self.speed <= 60):
+               super().avoid_obstacles()
+           else:
+               self.direction = (self.direction + 90) % 360
+               self.obstacle_found = False
+           self.speed /= 2
+           self.step_length /= 2
+
+
+robot_1 = WalkBot(150, 0, 10, 10)
+robot_1.obstacle_found = True
+robot_1.avoid_obstacles()
+
+print(robot_1.direction) # 90
+print(robot_1.speed) # 75
+print(robot_1.step_length) # 5
+
+robot_2 = WalkBot(60, 0, 20, 40)
+robot_2.obstacle_found = True
+robot_2.avoid_obstacles()
+
+print(robot_2.direction) # 180
+print(robot_2.speed) # 30
+print(robot_2.step_length) # 20
+
+## 4. overriding dunder method
+
+class Robot:
+    all_disabled = False
+    latitude = -999999
+    longitude = -999999
+    robot_count = 0
+
+    def __init__(self, speed = 0, direction = 180, sensor_range = 10):
+        self.speed = speed
+        self.direction = direction
+        self.sensor_range = sensor_range
+        self.obstacle_found = False
+        Robot.robot_count += 1
+        self.id = Robot.robot_count
+    def __add__(self, value):
+        self.speed += value
+    def __sub__(self, value):
+        self.speed -= value
+    def control_bot(self, new_speed, new_direction):
+        self.speed = new_speed
+        self.direction = new_direction
+
+    def adjust_sensor(self, new_sensor_range):
+        self.sensor_range = new_sensor_range
+
+    def avoid_obstacles(self):
+        if self.obstacle_found:
+            self.direction = (self.direction + 180) % 360
+            self.obstacle_found = False
+
+class DriveBot(Robot):
+
+    def __init__(self, motor_speed = 0, direction = 180, sensor_range = 10):
+        super().__init__(motor_speed, direction, sensor_range)
+    
+    def __add__(self, value):
+        super().__add__(value)
+        self.sensor_range += value
+    def __sub__(self, value):
+        super().__sub__(value)
+        self.sensor_range -= value
+
+class WalkBot(Robot):
+
+    def __init__(self, steps_per_minute = 0, direction = 180, sensor_range = 10, step_length = 5):
+        super().__init__(steps_per_minute, direction, sensor_range)
+        self.step_length = step_length
+
+    def adjust_sensor(self, new_sensor_range):
+       super().adjust_sensor(new_sensor_range)
+       self.obstacle_found = False
+       self.step_length = 5
+
+    def avoid_obstacles(self):
+       if(self.obstacle_found):
+           if(self.speed <= 60):
+               super().avoid_obstacles()
+           else:
+               self.direction = (self.direction + 90) % 360
+               self.obstacle_found = False
+           self.speed /= 2
+           self.step_length /= 2
+
+    def __add__(self, value):
+        super().__add__(value)
+        self.step_length += (value/2)
+    def __sub__(self, value):
+        super().__sub__(value)
+        self.step_length -= (value/2)
+
+robot_1 = DriveBot()
+robot_2 = WalkBot()
+
+# Uncomment these lines when you are ready to test your code!
+robot_1 + 20
+robot_1 - 10
+robot_2 + 10
+robot_2 - 5
+
+print(robot_1.speed) # 10
+print(robot_1.sensor_range) # 20
+print(robot_2.speed) # 5
+print(robot_2.step_length) # 7.5
+
+
+## 5. prevent a robot takeover
+
+class WalkBot(Robot):
+    walk_bot_count = 0
+
+    def __init__(self, steps_per_minute = 0, direction = 180, sensor_range = 10, step_length = 5):
+        super().__init__(steps_per_minute, direction, sensor_range)
+        self.step_length = step_length
+        WalkBot.walk_bot_count += 1
+        if super().robot_count >= 10:
+          if WalkBot.walk_bot_count >= 5:
+            Robot.all_disabled = True
+            
+robot_1 = DriveBot()
+robot_2 = WalkBot()
+robot_3 = DriveBot()
+robot_4 = DriveBot()
+robot_5 = WalkBot()
+robot_6 = DriveBot()
+robot_7 = DriveBot()
+robot_8 = WalkBot()
+robot_9 = WalkBot()
+print(Robot.all_disabled) # False
+robot_10 = WalkBot()
+print(Robot.all_disabled) # True
